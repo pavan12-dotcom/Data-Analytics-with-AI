@@ -1,0 +1,43 @@
+{
+  "family": "customer-analytics-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::451649134117:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "customer-analytics-container",
+      "image": "451649134117.dkr.ecr.ap-south-1.amazonaws.com/customer-analytics:latest",
+      "portMappings": [
+        {
+          "containerPort": 8501,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "GEMINI_API_KEY",
+          "value": "YOUR_GEMINI_API_KEY"
+        },
+        {
+          "name": "STREAMLIT_SERVER_PORT",
+          "value": "8501"
+        },
+        {
+          "name": "STREAMLIT_SERVER_HEADLESS",
+          "value": "true"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/customer-analytics",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "essential": true
+    }
+  ]
+}

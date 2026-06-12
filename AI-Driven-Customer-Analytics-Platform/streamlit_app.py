@@ -677,7 +677,8 @@ elif page == "🔮 Predictions & ML":
             ship_v  = st.selectbox("Shipping",  df["shipping_type"].unique())
             pay_v   = st.selectbox("Payment",   df["payment_method"].unique())
 
-        age_grp = pd.qcut([age_v], q=4, bins=pd.qcut(df["age"],q=4).cat.categories)[0]
+        _, age_bins = pd.qcut(df["age"], q=4, retbins=True)
+        age_grp = pd.cut([age_v], bins=age_bins, labels=["Young Adult","Adult","Middle-aged","Senior"], include_lowest=True)[0]
         loy_tier = pd.cut([prev_v], bins=[0,10,25,40,51],
                           labels=["New","Regular","Loyal","Champion"])[0]
 
@@ -860,30 +861,73 @@ Subscribers are predicted to spend **8.3% more** per transaction.
     st.markdown(narrative)
 
     st.divider()
-    st.subheader("🤖 OpenAI Prompt Engineering (Optional)")
-    api_key = st.text_input("Enter OpenAI API Key (optional)", type="password",
-                             placeholder="sk-... (leave blank to use template narrative above)")
-    if api_key:
-        try:
-            import openai
-            client = openai.OpenAI(api_key=api_key)
-            prompt = f"""You are a Senior Data Scientist. Write a 3-paragraph executive summary
-(professional tone, actionable insights) for this customer analytics data:
-- Customers: {len(dff):,} | Avg Purchase: ${dff['purchase_amount'].mean():.2f}
-- Top Season: {top_season} | Sub Rate: {sub_rate:.1f}%
-- Champion Segment: {champion_pct:.1f}% | Top Category: {top_cat}
-- ML R²: 0.847 | Classification F1: 0.77"""
-            with st.spinner("Generating AI narrative with GPT..."):
-                resp = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[{"role":"user","content":prompt}]
-                )
-            st.success("GPT Narrative:")
-            st.markdown(resp.choices[0].message.content)
-        except Exception as e:
-            st.error(f"OpenAI error: {e}")
-    else:
-        st.info("💡 Add an OpenAI API key above to generate a GPT-4 powered narrative. Template narrative is shown above.")
+    st.subheader("🤖 Dynamic AI Narrative Generation (Optional)")
+    st.caption("Generate a real-time customized executive summary using Google Gemini or OpenAI GPT.")
+    
+    # Check if loaded from .env
+    env_gemini_key = os.getenv("GEMINI_API_KEY", "")
+    env_openai_key = os.getenv("OPENAI_API_KEY", "")
+    
+    provider = st.radio("Choose AI Model Provider:", ["Google Gemini", "OpenAI GPT-4"], horizontal=True)
+    
+    prompt = f"""You are a Senior Data Scientist at a retail analytics firm.
+Write a professional, concise 3-paragraph executive summary with actionable insights for this customer analytics dataset:
+- Total Customers: {len(dff):,} (filtered)
+- Average Purchase Value: ${dff['purchase_amount'].mean():.2f} (range: ${dff['purchase_amount'].min():.0f}-${dff['purchase_amount'].max():.0f})
+- Peak Spend Season: {top_season} (${top_season_v:.2f} average)
+- Subscription Rate: {sub_rate:.1f}% (our biggest retention gap)
+- Top Total Revenue Category: {top_cat}
+- Champion Customers Segment: {champion_pct:.1f}% of base
+- ML Model Scores: Purchase Regression R²=0.847, Subscription Classification F1=0.77, Customer Segmentation Silhouette=0.34
+- Statistical Test: ANOVA for Season-Purchase correlation is Significant (p < 0.05).
+
+Focus on: revenue growth opportunities, customer retention (subscription push), and segment personalization strategy."""
+
+    if provider == "Google Gemini":
+        gemini_key = st.text_input(
+            "Enter Gemini API Key (optional)", 
+            value=env_gemini_key, 
+            type="password",
+            placeholder="AIzaSy... (leave blank to use template narrative above or if set in .env)"
+        )
+        
+        if gemini_key:
+            try:
+                import google.generativeai as genai
+                genai.configure(api_key=gemini_key)
+                model = genai.GenerativeModel("gemini-2.5-flash")
+                with st.spinner("Generating AI narrative with Gemini..."):
+                    resp = model.generate_content(prompt)
+                st.success("✨ Gemini Generated Narrative:")
+                st.markdown(resp.text)
+            except Exception as e:
+                st.error(f"Gemini error: {e}")
+        else:
+            st.info("💡 Provide a Gemini API key (e.g. GEMINI_API_KEY in .env) to generate a dynamic narrative using Google's Gemini. Template narrative is shown above.")
+            
+    elif provider == "OpenAI GPT-4":
+        openai_key = st.text_input(
+            "Enter OpenAI API Key (optional)", 
+            value=env_openai_key, 
+            type="password",
+            placeholder="sk-... (leave blank to use template narrative above or if set in .env)"
+        )
+        
+        if openai_key:
+            try:
+                import openai
+                client = openai.OpenAI(api_key=openai_key)
+                with st.spinner("Generating AI narrative with GPT..."):
+                    resp = client.chat.completions.create(
+                        model="gpt-4o-mini",
+                        messages=[{"role":"user","content":prompt}]
+                    )
+                st.success("✨ GPT Narrative:")
+                st.markdown(resp.choices[0].message.content)
+            except Exception as e:
+                st.error(f"OpenAI error: {e}")
+        else:
+            st.info("💡 Provide an OpenAI API key (e.g. OPENAI_API_KEY in .env) to generate a dynamic narrative using OpenAI. Template narrative is shown above.")
 
     # Download report
     st.download_button(

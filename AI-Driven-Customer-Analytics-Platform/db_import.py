@@ -15,12 +15,23 @@
 
 import os
 import sys
+import io
 import json
 import time
 import argparse
 import pandas as pd
 import numpy as np
 from pathlib import Path
+
+# ── Force UTF-8 output (Windows fix) ─────────────────────────
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+else:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+else:
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 # ── Parse args ───────────────────────────────────────────────
 parser = argparse.ArgumentParser()

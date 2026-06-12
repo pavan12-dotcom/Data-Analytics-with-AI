@@ -11,12 +11,23 @@
 
 import os
 import sys
+import io
 import json
 import time
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from datetime import datetime
+
+# ── Force UTF-8 output (Windows fix) ─────────────────────────
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+else:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+else:
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 # ── Load .env if present ─────────────────────────────────────
 try:
@@ -225,11 +236,12 @@ seg_df = seg_profile.rename(columns={
     "avg_purchase"  : "avg_purchase_amount",
     "avg_prev_purch": "avg_previous_purchases",
     "avg_rating"    : "avg_review_rating",
+    "sub_rate"      : "subscription_rate",
 })
 
 seg_df[["cluster_id","segment_name","customer_count","avg_age",
         "avg_purchase_amount","avg_review_rating","avg_previous_purchases",
-        "sub_rate","discount_rate","description","strategy"]].to_sql(
+        "subscription_rate","discount_rate","description","strategy"]].to_sql(
     name="customer_segments",
     con=engine, if_exists="replace", index=False
 )
