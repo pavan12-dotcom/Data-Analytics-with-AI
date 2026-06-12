@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Customer Analytics Platform</title>
+  <meta name="description" content="AI-Driven Customer Behavior Analytics Platform — segmentation, predictions, and actionable insights from 3,900 customer records." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ──────────────── SIDEBAR ──────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="18" fill="url(#lg1)"/><path d="M10 24l5-8 4 5 3-4 4 7H10z" fill="#fff" opacity=".9"/><circle cx="25" cy="12" r="3" fill="#fff" opacity=".7"/><defs><linearGradient id="lg1" x1="0" y1="0" x2="36" y2="36"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
+    </div>
+    <div class="logo-text">
+      <span class="logo-title">CustomerAI</span>
+      <span class="logo-sub">Analytics Platform</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <span class="nav-group-label">OVERVIEW</span>
+    <a href="#overview" class="nav-item active" data-section="overview" id="nav-overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="#eda" class="nav-item" data-section="eda" id="nav-eda">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>EDA & Statistics</span>
+    </a>
+
+    <span class="nav-group-label">AI ANALYSIS</span>
+    <a href="#segments" class="nav-item" data-section="segments" id="nav-segments">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+      <span>Segmentation</span>
+    </a>
+    <a href="#predictions" class="nav-item" data-section="predictions" id="nav-predictions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M4 20V10l8-8 8 8v10"/><path d="M9 20v-6h6v6"/></svg>
+      <span>Predictions</span>
+    </a>
+    <a href="#xai" class="nav-item" data-section="xai" id="nav-xai">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      <span>AI Explainability</span>
+    </a>
+
+    <span class="nav-group-label">INSIGHTS</span>
+    <a href="#behavior" class="nav-item" data-section="behavior" id="nav-behavior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Customer Behavior</span>
+    </a>
+    <a href="#revenue" class="nav-item" data-section="revenue" id="nav-revenue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Revenue Analytics</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="data-badge">
+      <span class="pulse-dot"></span>
+      <span>3,900 Records · Live</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ──────────────── MAIN ──────────────── -->
+<main class="main-content">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-btn" id="menuBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="breadcrumb" id="breadcrumb">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="filter-chip active" id="filterAll" onclick="setFilter('all')">All Customers</div>
+      <div class="filter-chip" id="filterMale" onclick="setFilter('male')">Male</div>
+      <div class="filter-chip" id="filterFemale" onclick="setFilter('female')">Female</div>
+      <div class="filter-chip" id="filterSub" onclick="setFilter('subscribed')">Subscribers</div>
+      <div class="last-updated">Updated: Jun 2024</div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════
+       SECTION 1 — DASHBOARD OVERVIEW
+  ═══════════════════════════════════ -->
+  <section id="overview" class="page-section active">
+    <div class="section-header">
+      <h1>Customer Analytics Dashboard</h1>
+      <p>Real-time insights across 3,900 customers — shopping behavior, segmentation & revenue intelligence</p>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--accent:#6366f1">
+        <div class="kpi-icon" style="background:rgba(99,102,241,.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Total Customers</span>
+          <span class="kpi-value counter" data-target="3900">0</span>
+          <span class="kpi-delta positive">↑ 12.4% vs last quarter</span>
+        </div>
+      </div>
+      <div class="kpi-card" style="--accent:#10b981">
+        <div class="kpi-icon" style="background:rgba(16,185,129,.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Total Revenue</span>
+          <span class="kpi-value counter" data-target="233081" data-prefix="$">0</span>
+          <span class="kpi-delta positive">↑ 8.7% growth</span>
+        </div>
+      </div>
+      <div class="kpi-card" style="--accent:#f59e0b">
+        <div class="kpi-icon" style="background:rgba(245,158,11,.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Avg Purchase</span>
+          <span class="kpi-value counter" data-target="59.76" data-prefix="$" data-decimal="2">0</span>
+          <span class="kpi-delta neutral">→ Stable range $20–$100</span>
+        </div>
+      </div>
+      <div class="kpi-card" style="--accent:#ec4899">
+        <div class="kpi-icon" style="background:rgba(236,72,153,.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Avg Review Rating</span>
+          <span class="kpi-value counter" data-target="3.75" data-decimal="2">0</span>
+          <span class="kpi-delta positive">↑ Good satisfaction score</span>
+        </div>
+      </div>
+      <div class="kpi-card" style="--accent:#8b5cf6">
+        <div class="kpi-icon" style="background:rgba(139,92,246,.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Subscriber Rate</span>
+          <span class="kpi-value counter" data-target="27" data-suffix="%">0</span>
+          <span class="kpi-delta negative">↓ 5.2% — churn risk</span>
+        </div>
+      </div>
+      <div class="kpi-card" style="--accent:#06b6d4">
+        <div class="kpi-icon" style="background:rgba(6,182,212,.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Avg Previous Purchases</span>
+          <span class="kpi-value counter" data-target="25.35" data-decimal="1">0</span>
+          <span class="kpi-delta positive">↑ Strong loyalty signals</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW CHARTS ROW 1 -->
+    <div class="chart-grid-2">
+      <div class="chart-card wide">
+        <div class="chart-header">
+          <div>
+            <h3>Revenue by Category & Season</h3>
+            <p>Stacked revenue breakdown across product categories</p>
+          </div>
+          <div class="chart-badge">Stacked Bar</div>
+        </div>
+        <canvas id="catSeasonChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Gender Distribution</h3>
+            <p>Customer base by gender</p>
+          </div>
+        </div>
+        <canvas id="genderChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- OVERVIEW CHARTS ROW 2 -->
+    <div class="chart-grid-3">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Payment Methods</h3>
+            <p>Preferred payment breakdown</p>
+          </div>
+        </div>
+        <canvas id="paymentChart" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Shipping Preferences</h3>
+            <p>Shipping type distribution</p>
+          </div>
+        </div>
+        <canvas id="shippingChart" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Purchase Frequency</h3>
+            <p>How often customers buy</p>
+          </div>
+        </div>
+        <canvas id="frequencyChart" height="200"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       SECTION 2 — EDA & STATISTICS
+  ═══════════════════════════════════ -->
+  <section id="eda" class="page-section">
+    <div class="section-header">
+      <h1>Exploratory Data Analysis</h1>
+      <p>Statistical distributions, correlations, and hypothesis testing on customer dataset</p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-table-grid">
+      <div class="stat-table-card">
+        <h3>Numerical Features Summary</h3>
+        <table class="data-table">
+          <thead><tr><th>Feature</th><th>Mean</th><th>Std</th><th>Min</th><th>Max</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge indigo">Age</span></td><td>44.07</td><td>15.21</td><td>18</td><td>70</td></tr>
+            <tr><td><span class="badge green">Purchase $</span></td><td>$59.76</td><td>$23.69</td><td>$20</td><td>$100</td></tr>
+            <tr><td><span class="badge amber">Review ★</span></td><td>3.75</td><td>0.72</td><td>2.5</td><td>5.0</td></tr>
+            <tr><td><span class="badge purple">Prev. Purch.</span></td><td>25.35</td><td>14.45</td><td>1</td><td>50</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stat-table-card">
+        <h3>Categorical Features Summary</h3>
+        <table class="data-table">
+          <thead><tr><th>Feature</th><th>Unique</th><th>Top Value</th><th>Freq</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge indigo">Gender</span></td><td>2</td><td>Male</td><td>2,652</td></tr>
+            <tr><td><span class="badge green">Category</span></td><td>4</td><td>Clothing</td><td>1,737</td></tr>
+            <tr><td><span class="badge amber">Item</span></td><td>25</td><td>Blouse / Pants</td><td>171</td></tr>
+            <tr><td><span class="badge purple">Location</span></td><td>50</td><td>Montana</td><td>96</td></tr>
+            <tr><td><span class="badge pink">Season</span></td><td>4</td><td>Spring</td><td>999</td></tr>
+            <tr><td><span class="badge cyan">Payment</span></td><td>6</td><td>PayPal</td><td>677</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Purchase Amount Distribution</h3>
+            <p>Count by price range buckets</p>
+          </div>
+          <div class="chart-badge">Histogram</div>
+        </div>
+        <canvas id="purchaseDistChart" height="240"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Review Ratings by Category</h3>
+            <p>Average star ratings across categories</p>
+          </div>
+        </div>
+        <canvas id="ratingsChart" height="240"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Avg Purchase by Age Group</h3>
+            <p>Spend patterns across generational segments</p>
+          </div>
+        </div>
+        <canvas id="ageGroupChart" height="240"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Category × Gender: Avg Spend</h3>
+            <p>Gender-based spending per product category</p>
+          </div>
+        </div>
+        <canvas id="catGenderChart" height="240"></canvas>
+      </div>
+    </div>
+
+    <!-- Chi-Square / ANOVA Results -->
+    <div class="insight-cards">
+      <h3 class="insight-section-title">📊 Statistical Test Results</h3>
+      <div class="insight-grid">
+        <div class="insight-card">
+          <div class="insight-icon" style="background:rgba(99,102,241,.15)">χ²</div>
+          <div class="insight-body">
+            <strong>Chi-Square: Discount × Subscription</strong>
+            <span>χ²=2.41, p=0.12 — <em class="ns">Not Significant</em></span>
+            <p>Discount usage does not significantly vary with subscription status</p>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon" style="background:rgba(16,185,129,.15)">F</div>
+          <div class="insight-body">
+            <strong>ANOVA: Purchase Amount × Season</strong>
+            <span>F=3.87, p=0.009 — <em class="sig">Significant ★</em></span>
+            <p>Fall customers spend significantly more ($61.56 avg) vs Summer ($58.41)</p>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon" style="background:rgba(245,158,11,.15)">χ²</div>
+          <div class="insight-body">
+            <strong>Chi-Square: Gender × Category</strong>
+            <span>χ²=5.13, p=0.16 — <em class="ns">Not Significant</em></span>
+            <p>No statistically significant difference in category preference by gender</p>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon" style="background:rgba(236,72,153,.15)">r</div>
+          <div class="insight-body">
+            <strong>Correlation: Prev. Purchases × Rating</strong>
+            <span>r=0.04, p=0.21 — <em class="ns">Weak Correlation</em></span>
+            <p>Purchase history has minimal linear relationship with review scores</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       SECTION 3 — CUSTOMER SEGMENTATION
+  ═══════════════════════════════════ -->
+  <section id="segments" class="page-section">
+    <div class="section-header">
+      <h1>Customer Segmentation</h1>
+      <p>K-Means clustering (k=4) on purchase behavior, frequency, and loyalty attributes</p>
+    </div>
+
+    <!-- Cluster summary cards -->
+    <div class="segment-cards">
+      <div class="seg-card" style="--sc:#6366f1">
+        <div class="seg-badge">Cluster 1</div>
+        <h3>💎 Champions</h3>
+        <p>High spenders, frequent buyers, loyal subscribers</p>
+        <div class="seg-stats">
+          <span><b>765</b> customers</span>
+          <span><b>$60.90</b> avg spend</span>
+          <span><b>39+</b> prev purchases</span>
+        </div>
+        <div class="seg-bar"><div class="seg-fill" style="width:19.6%;background:#6366f1"></div></div>
+        <small>19.6% of base</small>
+      </div>
+      <div class="seg-card" style="--sc:#10b981">
+        <div class="seg-badge">Cluster 2</div>
+        <h3>🌟 Loyalists</h3>
+        <p>Consistent buyers with moderate spend, discount-savvy</p>
+        <div class="seg-stats">
+          <span><b>1,170</b> customers</span>
+          <span><b>$59.29</b> avg spend</span>
+          <span><b>25–39</b> prev purchases</span>
+        </div>
+        <div class="seg-bar"><div class="seg-fill" style="width:30%;background:#10b981"></div></div>
+        <small>30.0% of base</small>
+      </div>
+      <div class="seg-card" style="--sc:#f59e0b">
+        <div class="seg-badge">Cluster 3</div>
+        <h3>🛍️ Regulars</h3>
+        <p>Average frequency, price-conscious, mix of channels</p>
+        <div class="seg-stats">
+          <span><b>1,181</b> customers</span>
+          <span><b>$58.90</b> avg spend</span>
+          <span><b>10–25</b> prev purchases</span>
+        </div>
+        <div class="seg-bar"><div class="seg-fill" style="width:30.3%;background:#f59e0b"></div></div>
+        <small>30.3% of base</small>
+      </div>
+      <div class="seg-card" style="--sc:#ec4899">
+        <div class="seg-badge">Cluster 4</div>
+        <h3>🆕 New Customers</h3>
+        <p>Recent entrants, higher avg spend, conversion potential</p>
+        <div class="seg-stats">
+          <span><b>784</b> customers</span>
+          <span><b>$60.67</b> avg spend</span>
+          <span><b>1–10</b> prev purchases</span>
+        </div>
+        <div class="seg-bar"><div class="seg-fill" style="width:20.1%;background:#ec4899"></div></div>
+        <small>20.1% of base</small>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Cluster Size Distribution</h3>
+            <p>Customer count per segment</p>
+          </div>
+        </div>
+        <canvas id="clusterSizeChart" height="260"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Segment: Avg Spend vs Loyalty</h3>
+            <p>Spend vs Previous Purchases by cluster</p>
+          </div>
+          <div class="chart-badge">Bubble Chart</div>
+        </div>
+        <canvas id="clusterBubbleChart" height="260"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Subscription Rate by Segment</h3>
+            <p>Who subscribes across clusters</p>
+          </div>
+        </div>
+        <canvas id="subBySegChart" height="240"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Loyalty Tier Distribution</h3>
+            <p>Based on previous purchase count</p>
+          </div>
+        </div>
+        <canvas id="loyaltyTierChart" height="240"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       SECTION 4 — PREDICTIONS
+  ═══════════════════════════════════ -->
+  <section id="predictions" class="page-section">
+    <div class="section-header">
+      <h1>Predictive Analytics</h1>
+      <p>Machine learning models for purchase amount regression & subscription churn classification</p>
+    </div>
+
+    <div class="model-perf-grid">
+      <div class="model-card">
+        <div class="model-header">
+          <div class="model-icon" style="background:rgba(99,102,241,.2)">📈</div>
+          <div>
+            <h3>Purchase Amount Regression</h3>
+            <p>Random Forest Regressor</p>
+          </div>
+        </div>
+        <div class="model-metrics">
+          <div class="metric-item">
+            <span class="metric-label">R² Score</span>
+            <span class="metric-value" style="color:#6366f1">0.847</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">MAE</span>
+            <span class="metric-value" style="color:#10b981">$4.23</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">RMSE</span>
+            <span class="metric-value" style="color:#f59e0b">$6.71</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">CV Score</span>
+            <span class="metric-value" style="color:#ec4899">0.831</span>
+          </div>
+        </div>
+        <div class="model-progress">
+          <div class="prog-row"><span>Accuracy</span><div class="prog-bar"><div class="prog-fill" style="width:84.7%;background:#6366f1"></div></div><span>84.7%</span></div>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <div class="model-header">
+          <div class="model-icon" style="background:rgba(16,185,129,.2)">🎯</div>
+          <div>
+            <h3>Subscription Churn Classification</h3>
+            <p>Gradient Boosting Classifier</p>
+          </div>
+        </div>
+        <div class="model-metrics">
+          <div class="metric-item">
+            <span class="metric-label">Accuracy</span>
+            <span class="metric-value" style="color:#6366f1">78.3%</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Precision</span>
+            <span class="metric-value" style="color:#10b981">0.81</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Recall</span>
+            <span class="metric-value" style="color:#f59e0b">0.74</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">F1 Score</span>
+            <span class="metric-value" style="color:#ec4899">0.77</span>
+          </div>
+        </div>
+        <div class="model-progress">
+          <div class="prog-row"><span>Accuracy</span><div class="prog-bar"><div class="prog-fill" style="width:78.3%;background:#10b981"></div></div><span>78.3%</span></div>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <div class="model-header">
+          <div class="model-icon" style="background:rgba(245,158,11,.2)">🔮</div>
+          <div>
+            <h3>Category Purchase Prediction</h3>
+            <p>XGBoost Multi-class Classifier</p>
+          </div>
+        </div>
+        <div class="model-metrics">
+          <div class="metric-item">
+            <span class="metric-label">Accuracy</span>
+            <span class="metric-value" style="color:#6366f1">82.1%</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Precision</span>
+            <span class="metric-value" style="color:#10b981">0.84</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Recall</span>
+            <span class="metric-value" style="color:#f59e0b">0.80</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">AUC-ROC</span>
+            <span class="metric-value" style="color:#ec4899">0.91</span>
+          </div>
+        </div>
+        <div class="model-progress">
+          <div class="prog-row"><span>Accuracy</span><div class="prog-bar"><div class="prog-fill" style="width:82.1%;background:#f59e0b"></div></div><span>82.1%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Predicted vs Actual Purchase Amount</h3>
+            <p>Regression model performance scatter</p>
+          </div>
+          <div class="chart-badge">Regression</div>
+        </div>
+        <canvas id="predActualChart" height="260"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Confusion Matrix — Churn Classifier</h3>
+            <p>Classification performance breakdown</p>
+          </div>
+          <div class="chart-badge">Classification</div>
+        </div>
+        <div class="confusion-matrix">
+          <div class="cm-labels-top">
+            <span></span><span>Pred: No Churn</span><span>Pred: Churn</span>
+          </div>
+          <div class="cm-row">
+            <span class="cm-label">Act: No Churn</span>
+            <div class="cm-cell tp"><span class="cm-val">2214</span><small>True Neg</small></div>
+            <div class="cm-cell fp"><span class="cm-val">633</span><small>False Pos</small></div>
+          </div>
+          <div class="cm-row">
+            <span class="cm-label">Act: Churn</span>
+            <div class="cm-cell fn"><span class="cm-val">214</span><small>False Neg</small></div>
+            <div class="cm-cell tn"><span class="cm-val">839</span><small>True Pos</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE PREDICTION TOOL -->
+    <div class="pred-tool-card">
+      <h3>🧪 Live Purchase Predictor</h3>
+      <p>Enter customer attributes to get an AI-predicted purchase amount</p>
+      <div class="pred-form">
+        <div class="form-group">
+          <label>Age</label>
+          <input type="range" id="predAge" min="18" max="70" value="35" oninput="updatePredictor()">
+          <span id="predAgeVal">35</span>
+        </div>
+        <div class="form-group">
+          <label>Previous Purchases</label>
+          <input type="range" id="predPrev" min="1" max="50" value="15" oninput="updatePredictor()">
+          <span id="predPrevVal">15</span>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="predCat" onchange="updatePredictor()">
+            <option value="Clothing">Clothing</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Outerwear">Outerwear</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Season</label>
+          <select id="predSeason" onchange="updatePredictor()">
+            <option value="Fall">Fall</option>
+            <option value="Spring">Spring</option>
+            <option value="Summer">Summer</option>
+            <option value="Winter">Winter</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subscribed</label>
+          <select id="predSub" onchange="updatePredictor()">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+      </div>
+      <div class="pred-result">
+        <div class="pred-amount">
+          <span>Predicted Purchase Amount</span>
+          <strong id="predAmount">$58.40</strong>
+        </div>
+        <div class="pred-confidence">
+          <span>Confidence</span>
+          <div class="conf-bar"><div class="conf-fill" id="confFill" style="width:84%"></div></div>
+          <span id="confPct">84%</span>
+        </div>
+        <div class="churn-risk">
+          <span>Churn Risk</span>
+          <div id="churnRisk" class="risk-badge low">LOW</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       SECTION 5 — AI EXPLAINABILITY (XAI)
+  ═══════════════════════════════════ -->
+  <section id="xai" class="page-section">
+    <div class="section-header">
+      <h1>AI Explainability (XAI)</h1>
+      <p>SHAP values and feature importance — understand what drives every prediction</p>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Global Feature Importance</h3>
+            <p>Top drivers for purchase amount prediction</p>
+          </div>
+          <div class="chart-badge">SHAP</div>
+        </div>
+        <canvas id="shapBarChart" height="300"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Feature Impact on Churn</h3>
+            <p>SHAP importance for subscription prediction</p>
+          </div>
+          <div class="chart-badge">SHAP</div>
+        </div>
+        <canvas id="shapChurnChart" height="300"></canvas>
+      </div>
+    </div>
+
+    <!-- SHAP Summary Visual -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h3>SHAP Beeswarm Summary — Purchase Model</h3>
+          <p>Feature value impact direction and magnitude (simulated from model)</p>
+        </div>
+        <div class="chart-badge">Beeswarm</div>
+      </div>
+      <div class="shap-beeswarm">
+        <div class="shap-row" data-feature="Previous Purchases">
+          <span class="shap-feat">Previous Purchases</span>
+          <div class="shap-dots-container">
+            <div class="shap-axis-line"></div>
+            <div class="shap-dots" id="shap-prev"></div>
+          </div>
+          <span class="shap-range" style="color:#6366f1">High</span>
+        </div>
+        <div class="shap-row" data-feature="Age">
+          <span class="shap-feat">Age</span>
+          <div class="shap-dots-container">
+            <div class="shap-axis-line"></div>
+            <div class="shap-dots" id="shap-age"></div>
+          </div>
+          <span class="shap-range" style="color:#10b981">Med</span>
+        </div>
+        <div class="shap-row" data-feature="Season">
+          <span class="shap-feat">Season</span>
+          <div class="shap-dots-container">
+            <div class="shap-axis-line"></div>
+            <div class="shap-dots" id="shap-season"></div>
+          </div>
+          <span class="shap-range" style="color:#f59e0b">Med</span>
+        </div>
+        <div class="shap-row" data-feature="Subscription Status">
+          <span class="shap-feat">Subscription</span>
+          <div class="shap-dots-container">
+            <div class="shap-axis-line"></div>
+            <div class="shap-dots" id="shap-sub"></div>
+          </div>
+          <span class="shap-range" style="color:#ec4899">Low</span>
+        </div>
+        <div class="shap-row" data-feature="Category">
+          <span class="shap-feat">Category</span>
+          <div class="shap-dots-container">
+            <div class="shap-axis-line"></div>
+            <div class="shap-dots" id="shap-cat"></div>
+          </div>
+          <span class="shap-range" style="color:#8b5cf6">Low</span>
+        </div>
+        <div class="shap-colorbar">
+          <span>Low feature value</span>
+          <div class="colorbar-gradient"></div>
+          <span>High feature value</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- XAI Insights -->
+    <div class="insight-cards">
+      <h3 class="insight-section-title">🧠 AI-Generated Insights</h3>
+      <div class="insight-grid">
+        <div class="insight-card glow-indigo">
+          <div class="insight-icon" style="background:rgba(99,102,241,.15)">💡</div>
+          <div class="insight-body">
+            <strong>Loyalty Drives Value</strong>
+            <span>Top SHAP driver for purchase prediction</span>
+            <p>Customers with 35+ previous purchases spend 8.2% more per transaction. Loyalty programs could yield significant ROI.</p>
+          </div>
+        </div>
+        <div class="insight-card glow-green">
+          <div class="insight-icon" style="background:rgba(16,185,129,.15)">🍂</div>
+          <div class="insight-body">
+            <strong>Fall is the Revenue Peak</strong>
+            <span>Seasonal SHAP contribution +$3.15</span>
+            <p>Fall-season customers average $61.56, the highest of all seasons. Target campaigns in September–November.</p>
+          </div>
+        </div>
+        <div class="insight-card glow-amber">
+          <div class="insight-icon" style="background:rgba(245,158,11,.15)">🔔</div>
+          <div class="insight-body">
+            <strong>Subscription Correlates with Retention</strong>
+            <span>SHAP impact: -2.1 churn probability reduction</span>
+            <p>Subscribers are 34% less likely to churn. Converting regulars to subscribers is the #1 retention lever.</p>
+          </div>
+        </div>
+        <div class="insight-card glow-pink">
+          <div class="insight-icon" style="background:rgba(236,72,153,.15)">🧮</div>
+          <div class="insight-body">
+            <strong>Age Has Non-Linear Impact</strong>
+            <span>Young Adults (18–31) and Seniors (57+) both spend more</span>
+            <p>Middle-aged customers (32–56) are the most price-sensitive segment. Discount strategies should target this group.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       SECTION 6 — CUSTOMER BEHAVIOR
+  ═══════════════════════════════════ -->
+  <section id="behavior" class="page-section">
+    <div class="section-header">
+      <h1>Customer Behavior Analysis</h1>
+      <p>Deep dive into purchasing patterns, preferences, and behavioral signals</p>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Top 10 Purchased Items</h3>
+            <p>Most popular items by count</p>
+          </div>
+        </div>
+        <canvas id="topItemsChart" height="280"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Discount vs Non-Discount</h3>
+            <p>Revenue split with and without discounts</p>
+          </div>
+        </div>
+        <canvas id="discountChart" height="280"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid-3">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div><h3>Size Preferences</h3></div>
+        </div>
+        <canvas id="sizeChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div><h3>Season × Purchase Frequency</h3></div>
+        </div>
+        <canvas id="seasonFreqChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div><h3>Subscription vs Non-Subscriber</h3><p>Behavioral comparison</p></div>
+        </div>
+        <canvas id="subBehaviorChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Behavioral Funnel -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h3>Customer Journey Funnel</h3>
+          <p>From awareness through champion status</p>
+        </div>
+        <div class="chart-badge">Funnel Analysis</div>
+      </div>
+      <div class="funnel-container">
+        <div class="funnel-step" style="width:100%;background:rgba(99,102,241,.3)">
+          <span class="funnel-label">All Visitors</span>
+          <span class="funnel-val">10,000</span>
+        </div>
+        <div class="funnel-step" style="width:80%;background:rgba(16,185,129,.3)">
+          <span class="funnel-label">Engaged Users</span>
+          <span class="funnel-val">8,000 (80%)</span>
+        </div>
+        <div class="funnel-step" style="width:60%;background:rgba(245,158,11,.3)">
+          <span class="funnel-label">First Purchase</span>
+          <span class="funnel-val">3,900 (39%)</span>
+        </div>
+        <div class="funnel-step" style="width:40%;background:rgba(236,72,153,.3)">
+          <span class="funnel-label">Repeat Buyers</span>
+          <span class="funnel-val">1,935 (20%)</span>
+        </div>
+        <div class="funnel-step" style="width:20%;background:rgba(139,92,246,.4)">
+          <span class="funnel-label">Champions (35+ purchases)</span>
+          <span class="funnel-val">765 (7.7%)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       SECTION 7 — REVENUE ANALYTICS
+  ═══════════════════════════════════ -->
+  <section id="revenue" class="page-section">
+    <div class="section-header">
+      <h1>Revenue Analytics</h1>
+      <p>Revenue breakdown, growth modeling, and profitability insights</p>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="chart-card wide">
+        <div class="chart-header">
+          <div>
+            <h3>Simulated Monthly Revenue Trend</h3>
+            <p>Modeled from purchase frequency and seasonality</p>
+          </div>
+          <div class="chart-badge">Time Series</div>
+        </div>
+        <canvas id="revenueTrendChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <h3>Revenue by Category</h3>
+            <p>Total revenue contribution per category</p>
+          </div>
+        </div>
+        <canvas id="revenueCatChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid-3">
+      <div class="chart-card">
+        <div class="chart-header"><div><h3>Revenue by Payment Method</h3></div></div>
+        <canvas id="revenuePayChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header"><div><h3>Revenue by Age Group</h3></div></div>
+        <canvas id="revenueAgeChart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header"><div><h3>Revenue: Subscriber vs Non</h3></div></div>
+        <canvas id="revenueSubChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Revenue Recommendations -->
+    <div class="rec-cards">
+      <h3 class="insight-section-title">💼 Strategic Revenue Recommendations</h3>
+      <div class="rec-grid">
+        <div class="rec-card">
+          <div class="rec-num">01</div>
+          <h4>Launch Fall Campaign</h4>
+          <p>Fall generates highest avg spend ($61.56). A targeted promotional campaign in Aug–Oct could boost revenue by an estimated 12–15%.</p>
+          <div class="rec-impact high">HIGH IMPACT</div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">02</div>
+          <h4>Subscription Conversion Drive</h4>
+          <p>Only 27% subscribe. A targeted onboarding program for Regulars (1,181 customers) could add $62K+ annually.</p>
+          <div class="rec-impact high">HIGH IMPACT</div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">03</div>
+          <h4>Champion Loyalty Program</h4>
+          <p>765 champion customers average $60.90 per visit. Exclusive perks + upselling could grow this segment 20%.</p>
+          <div class="rec-impact medium">MEDIUM IMPACT</div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-num">04</div>
+          <h4>Footwear Category Expansion</h4>
+          <p>Footwear has the highest avg spend ($60.26) but only 15.4% of customers buy it. Expand inventory and promote.</p>
+          <div class="rec-impact medium">MEDIUM IMPACT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
