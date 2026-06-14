@@ -8,9 +8,9 @@
 !.gitignore
 
 # Allow only these 5 specific files
-!AI-Driven-Customer-Analytics-Platform/customer_shopping_behavior_rawdata.csv
-!AI-Driven-Customer-Analytics-Platform/customer_shopping_behavior_clean.csv
-!AI-Driven-Customer-Analytics-Platform/WhatsApp\ Image\ 2026-06-13\ at\ 8.49.00\ PM.jpeg
-!AI-Driven-Customer-Analytics-Platform/Problem\ Statement.pdf
-!AI-Driven-Customer-Analytics-Platform/Customer_Shopping_Behavior_Analysis_Modern.pdf
+!AI-Driven-Customer-Analytics-Platform/1_customer_shopping_behavior_rawdata.csv
+!AI-Driven-Customer-Analytics-Platform/2_customer_shopping_behavior_clean.csv
+!AI-Driven-Customer-Analytics-Platform/3_WhatsApp\ Image\ 2026-06-13\ at\ 8.49.00\ PM.jpeg
+!AI-Driven-Customer-Analytics-Platform/4_Problem\ Statement.pdf
+!AI-Driven-Customer-Analytics-Platform/5_Customer_Shopping_Behavior_Analysis_Modern.pdf
 
