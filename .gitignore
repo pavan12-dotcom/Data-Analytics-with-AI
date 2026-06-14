@@ -17,7 +17,8 @@ env/
 # Ignore all files under AI-Driven-Customer-Analytics-Platform directory
 AI-Driven-Customer-Analytics-Platform/*
 
-# Except the following 5 files
+# Except the following files
+!AI-Driven-Customer-Analytics-Platform/README.md
 !AI-Driven-Customer-Analytics-Platform/1_customer_shopping_behavior_rawdata.csv
 !AI-Driven-Customer-Analytics-Platform/2_customer_shopping_behavior_clean.csv
 !AI-Driven-Customer-Analytics-Platform/3_WhatsApp\ Image\ 2026-06-13\ at\ 8.49.00\ PM.jpeg
