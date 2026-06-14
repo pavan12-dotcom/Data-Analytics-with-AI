@@ -1,15 +1,16 @@
-# Caches and temporary files
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
+# Ignore everything by default
+*
 
-# Environments
-.env
-venv/
-env/
-.venv/
+# Do not ignore directories so git can traverse them
+!*/
 
-# IDE files
-.vscode/
-.idea/
-.DS_Store
+# Do not ignore the .gitignore file itself
+!.gitignore
+
+# Allow only these 5 specific files
+!AI-Driven-Customer-Analytics-Platform/customer_shopping_behavior_rawdata.csv
+!AI-Driven-Customer-Analytics-Platform/customer_shopping_behavior_clean.csv
+!AI-Driven-Customer-Analytics-Platform/WhatsApp\ Image\ 2026-06-13\ at\ 8.49.00\ PM.jpeg
+!AI-Driven-Customer-Analytics-Platform/Problem\ Statement.pdf
+!AI-Driven-Customer-Analytics-Platform/Customer_Shopping_Behavior_Analysis_Modern.pdf
+
